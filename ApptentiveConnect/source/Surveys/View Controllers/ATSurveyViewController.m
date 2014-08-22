@@ -219,6 +219,14 @@ enum {
 		[self.navigationController.view setTintColor:[[ATConnect sharedConnection] tintColor]];
 		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
 	}
+	
+	if (self.seattleDesign) {
+		if ([self.navigationController.view respondsToSelector:@selector(setTintColor:)]) {
+			// #7E5C3C
+			UIColor *tintColor = [UIColor colorWithRed:126/255.0f green:92/255.0f blue:60/255.0f alpha:1.0f];
+			[self.navigationController.view setTintColor:tintColor];
+		}
+	}
 		
 	if (self.seattleDesign) {
 		// #DBDDDE
