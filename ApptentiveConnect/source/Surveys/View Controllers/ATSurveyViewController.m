@@ -341,6 +341,47 @@ enum {
 	return cellHeight;
 }
 
+-(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
+{
+	CGFloat height = UITableViewAutomaticDimension;
+	
+	if (self.seattleDesign) {
+		height = 0.00001f;
+	}
+	
+	return height;
+}
+
+
+-(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger)section
+{
+	CGFloat height = UITableViewAutomaticDimension;
+	
+	if (self.seattleDesign) {
+		height = 0.00001f;
+	}
+	
+	return height;
+}
+
+-(UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
+{
+	if (self.seattleDesign) {
+		return [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+	}
+	
+	return nil;
+}
+
+-(UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
+{
+	if (self.seattleDesign) {
+		return [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+	}
+	
+	return nil;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *ATSurveyExtraInfoCellIdentifier = @"ATSurveyExtraInfoCellIdentifier";
 	static NSString *ATSurveyCheckboxCellIdentifier = @"ATSurveyCheckboxCellIdentifier";
