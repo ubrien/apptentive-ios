@@ -237,7 +237,19 @@ enum {
 	self.title = ATLocalizedString(@"Survey", @"Survey view title");
 	
 	if (self.seattleDesign) {
-		self.title = ATLocalizedString(@"Feedback", @"Seattle Design survey view title");
+		self.title = ATLocalizedString(@"FEEDBACK", @"Seattle Design survey view title");
+		
+		// #4C4C4D
+		UIColor *titleColor = [UIColor colorWithRed:76/255.0f green:76/255.0f blue:77/255.0f alpha:1.0f];
+		NSDictionary *fontAttributes = @{NSForegroundColorAttributeName: titleColor,
+										 NSFontAttributeName: [UIFont fontWithName:@"Avenir-Heavy" size:15],
+										 NSKernAttributeName: @(200 * 15 / 1000)};
+		
+		UILabel *titleLabel = [[[UILabel alloc] init] autorelease];
+		titleLabel.attributedText = [[[NSAttributedString alloc] initWithString:self.navigationItem.title attributes:fontAttributes] autorelease];
+		[titleLabel sizeToFit];
+		
+		self.navigationItem.titleView = titleLabel;
 	}
 	
 	tableView.delegate = self;
