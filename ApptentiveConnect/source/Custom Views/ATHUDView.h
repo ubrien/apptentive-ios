@@ -17,6 +17,7 @@ typedef enum {
 	UIWindow *parentWindow;
 	UIImageView *icon;
 }
+@property (nonatomic, assign) BOOL fullScreen;
 @property (nonatomic, readonly) UILabel *label;
 @property (nonatomic, assign) ATHUDMarkType markType;
 @property (nonatomic, assign) CGSize size;
@@ -24,5 +25,7 @@ typedef enum {
 @property (nonatomic, assign) CGFloat fadeOutDuration;
 
 - (id)initWithWindow:(UIWindow *)window;
+- (id)initWithWindow:(UIWindow *)window fullScreen:(BOOL)fullScreen;
+
 - (void)show;
 @end

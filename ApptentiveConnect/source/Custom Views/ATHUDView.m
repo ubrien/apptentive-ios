@@ -26,8 +26,13 @@
 @synthesize label, markType, size, cornerRadius, fadeOutDuration;
 
 - (id)initWithWindow:(UIWindow *)window {
+	return [self initWithWindow:window fullScreen:NO];
+}
+
+- (id)initWithWindow:(UIWindow *)window fullScreen:(BOOL)fullScreen {
 	if ((self = [super initWithFrame:CGRectMake(0.0, 0.0, 100.0, 100.0)])) {
 		parentWindow = window;
+		_fullScreen = fullScreen;
 		[self setup];
 	}
 	return self;
