@@ -493,6 +493,13 @@ enum {
 			text = ATLocalizedString(@"required", @"Survey required answer fallback label.");
 		}
 		cell.textLabel.text = text;
+		
+		if (self.seattleDesign) {
+			// Issue where a 0.00001f sliver of text is visible because we can't set height to 0.
+			// So don't give cell any text.
+			cell.textLabel.text = @"";
+		}
+		
 		[cell layoutSubviews];
 	} else {
 		NSUInteger answerIndex = indexPath.row - 1;
