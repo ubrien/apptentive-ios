@@ -45,6 +45,13 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
+	
+	// Full-screen version of the HUD
+	if (self.fullScreen) {
+		[self layoutSubviewsFullscreen];
+		return;
+	}
+	
 #if !DRAW_ROUND_RECT
 	self.layer.cornerRadius = self.cornerRadius;
 #endif
@@ -83,6 +90,39 @@
 	}
 	
 	self.bounds = CGRectIntegral(insetAllRect);
+	self.center = CGPointMake(floorf(parentWindow.center.x), floorf(parentWindow.center.y));
+	label.frame = CGRectIntegral(finalLabelRect);
+	icon.frame = CGRectIntegral(finalImageRect);
+}
+
+- (void)layoutSubviewsFullscreen {
+	CGRect fullscreen = [[UIScreen mainScreen] bounds];
+	
+	[label sizeToFit];
+	
+	CGFloat labelTopPadding = 50.0;
+	CGFloat imageTopPadding = 71.0;
+	
+	CGSize labelSize = [label sizeThatFits:CGSizeMake(200.0, label.bounds.size.height)];
+	CGRect labelRect = CGRectMake(0.0, labelTopPadding, labelSize.width, labelSize.height);
+	CGSize imageSize = icon.image.size;
+	
+	// Center image
+	CGRect imageRect = CGRectMake(0.0, labelTopPadding + labelSize.height + imageTopPadding, imageSize.width, imageSize.height);
+	CGRect finalImageRect = imageRect;
+	finalImageRect.origin.y += self.cornerRadius;
+	if (finalImageRect.size.width < fullscreen.size.width) {
+		finalImageRect.origin.x += floorf((fullscreen.size.width - imageRect.size.width)/2.0);
+	}
+	
+	// Center label
+	CGRect finalLabelRect = labelRect;
+	finalLabelRect.origin.y += self.cornerRadius;
+	if (finalLabelRect.size.width < fullscreen.size.width) {
+		finalLabelRect.origin.x += floorf((fullscreen.size.width - finalLabelRect.size.width)/2.0);
+	}
+	
+	self.bounds = CGRectIntegral(fullscreen);
 	self.center = CGPointMake(floorf(parentWindow.center.x), floorf(parentWindow.center.y));
 	label.frame = CGRectIntegral(finalLabelRect);
 	icon.frame = CGRectIntegral(finalImageRect);
@@ -132,6 +172,11 @@
 	label.opaque = NO;
 	label.textColor = [UIColor whiteColor];
 	label.font = [UIFont boldSystemFontOfSize:17.0];
+	
+	if (self.fullScreen) {
+		label.font = [UIFont fontWithName:@"Avenir-Medium" size:30];
+	}
+	
 	label.textAlignment = NSTextAlignmentCenter;
 	label.lineBreakMode = NSLineBreakByWordWrapping;
 	label.adjustsFontSizeToFitWidth = YES;
@@ -139,6 +184,10 @@
 	[self addSubview:label];
 	
 	UIImage *iconImage = [ATBackend imageNamed:@"at_checkmark"];
+	if (self.fullScreen) {
+		iconImage = [ATBackend imageNamed:@"at_checkmark_fullscreen"];
+	}
+	
 	icon = [[UIImageView alloc] initWithImage:iconImage];
 	icon.backgroundColor = [UIColor clearColor];
 	icon.opaque = NO;
