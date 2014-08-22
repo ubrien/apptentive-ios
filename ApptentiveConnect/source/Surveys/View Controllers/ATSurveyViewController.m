@@ -98,6 +98,15 @@ enum {
 	[super didReceiveMemoryWarning];
 }
 
+- (void)sendSurveyIfValid {
+	if ([self validateSurvey]) {
+		[self sendSurvey];
+	} else {
+		[tableView reloadData];
+		[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.1];
+	}
+}
+
 - (IBAction)sendSurvey {
 	// Send text view notification, if applicable.
 	if (activeTextView || activeTextField) {
@@ -639,12 +648,7 @@ enum {
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == [[survey questions] count]) {
-		if ([self validateSurvey]) {
-			[self sendSurvey];
-		} else {
-			[tableView reloadData];
-			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.1];
-		}
+		[self sendSurveyIfValid];
 	} else {
 		ATSurveyQuestion *question = [self questionAtIndexPath:indexPath];
 		UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];

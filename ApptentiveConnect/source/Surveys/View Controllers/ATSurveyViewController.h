@@ -35,6 +35,7 @@
 @property (nonatomic, assign) BOOL seattleDesign;
 
 - (id)initWithSurvey:(ATSurvey *)survey;
+- (void)sendSurveyIfValid;
 - (IBAction)sendSurvey;
 @end
 
