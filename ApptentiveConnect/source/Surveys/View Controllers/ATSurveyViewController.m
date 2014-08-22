@@ -340,6 +340,11 @@ enum {
 			f.origin.y = 4;
 			cell.textLabel.frame = f;
 			cellHeight = MAX(32, s.height + 8);
+			
+			if (self.seattleDesign) {
+				// Hide "extra info" cell
+				cellHeight = 0;
+			}
 		} else {
 			f.origin.y = 10;
 			cell.textLabel.frame = f;
