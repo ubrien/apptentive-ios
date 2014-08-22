@@ -616,6 +616,10 @@ enum {
 			ATCellTextView *textView = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
 			textView.cellPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
 			textView.placeholder = ATLocalizedString(@"Answer", @"Answer label");
+			if (self.seattleDesign) {
+				textView.font = [UIFont fontWithName:@"Avenir-Medium" size:15];
+			}
+			
 			textView.delegate = self;
 			textView.question = question;
 			if (question.answerText != nil) {
