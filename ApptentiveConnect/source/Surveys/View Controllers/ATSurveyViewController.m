@@ -103,7 +103,16 @@ enum {
 		[self sendSurvey];
 	} else {
 		[tableView reloadData];
-		[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.1];
+		
+		if (self.seattleDesign) {
+			NSString *alertTitle = ATLocalizedString(@"Error", @"Error title when submitting a survey without answering a required answer.");
+			NSString *alertMessage = ATLocalizedString(@"Please answer all questions in order to submit feedback.", @"Error message when submitting a survey without answering a required answer.");
+			NSString *alertButtonText = ATLocalizedString(@"OK", @"Alert button text when submitting a survey without answering a required answer.");
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:alertTitle message:alertMessage delegate:nil cancelButtonTitle:alertButtonText otherButtonTitles:nil];
+			[alert show];
+		} else {
+			[self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:0.1];
+		}
 	}
 }
 
