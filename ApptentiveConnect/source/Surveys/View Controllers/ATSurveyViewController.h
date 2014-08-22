@@ -31,6 +31,9 @@
 }
 @property (nonatomic, copy) ATInteraction *interaction;
 @property (nonatomic, copy) NSString *errorText;
+
+@property (nonatomic, assign) BOOL seattleDesign;
+
 - (id)initWithSurvey:(ATSurvey *)survey;
 - (IBAction)sendSurvey;
 @end
