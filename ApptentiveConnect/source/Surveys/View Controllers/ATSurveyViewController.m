@@ -504,6 +504,10 @@ enum {
 				cell.textLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:15];
 				// #323333
 				cell.textLabel.textColor = [UIColor colorWithRed:50/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+				if ([cell respondsToSelector:@selector(setTintColor:)]) {
+					// Checkmark color
+					cell.tintColor = [UIColor colorWithRed:50/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+				}
 			}
 
 			[cell layoutSubviews];
