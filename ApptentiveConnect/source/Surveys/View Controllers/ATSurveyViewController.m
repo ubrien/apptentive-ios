@@ -230,14 +230,6 @@ enum {
 	}
 	
 	if (self.seattleDesign) {
-		if ([self.navigationController.view respondsToSelector:@selector(setTintColor:)]) {
-			// #7E5C3C
-			UIColor *tintColor = [UIColor colorWithRed:126/255.0f green:92/255.0f blue:60/255.0f alpha:1.0f];
-			[self.navigationController.view setTintColor:tintColor];
-		}
-	}
-		
-	if (self.seattleDesign) {
 		// #DBDDDE
 		UIColor *backgroundColor = [UIColor colorWithRed:219/255.0f green:221/255.0f blue:222/255.0f alpha:1.0f];
 				
@@ -245,10 +237,42 @@ enum {
 			[self.navigationController.navigationBar setBarTintColor:backgroundColor];
 		}
 		[self.navigationController.navigationBar setTranslucent:NO];
-	}
-	
-	if (![survey responseIsRequired]) {
-		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
+		
+		// #7E5C3C
+		UIColor *tintColor = [UIColor colorWithRed:126/255.0f green:92/255.0f blue:60/255.0f alpha:1.0f];
+		
+		// Cancel button
+		UIButton *cancelButton =  [UIButton buttonWithType:UIButtonTypeCustom];
+		[cancelButton addTarget:self action:@selector(cancel:)forControlEvents:UIControlEventTouchUpInside];
+		[cancelButton setFrame:CGRectMake(0, 0, 60, 31)];
+		UILabel *cancelLabel = [[UILabel alloc]initWithFrame:CGRectMake(-17, 7, 60, 20)];
+		cancelLabel.text = ATLocalizedString(@"Cancel", @"Button text for canceling survey.");
+		cancelLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
+		cancelLabel.textColor = tintColor;
+		cancelLabel.textAlignment = UITextAlignmentRight;
+		[cancelButton addSubview:cancelLabel];
+		UIBarButtonItem *cancelBarButton = [[UIBarButtonItem alloc] initWithCustomView:cancelButton];
+		if (![survey responseIsRequired]) {
+			self.navigationItem.leftBarButtonItem = cancelBarButton;
+		}
+		
+		// Send button
+		UIButton *sendButton =  [UIButton buttonWithType:UIButtonTypeCustom];
+		[sendButton addTarget:self action:@selector(sendSurveyIfValid)forControlEvents:UIControlEventTouchUpInside];
+		[sendButton setFrame:CGRectMake(0, 0, 60, 31)];
+		UILabel *sendLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 7, 60, 20)];
+		sendLabel.text = ATLocalizedString(@"Send", @"Button text for sending survey.");
+		sendLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:17];
+		sendLabel.textColor = tintColor;
+		sendLabel.textAlignment = UITextAlignmentRight;
+		[sendButton addSubview:sendLabel];
+		UIBarButtonItem *sendBarButton = [[UIBarButtonItem alloc] initWithCustomView:sendButton];
+		self.navigationItem.rightBarButtonItem = sendBarButton;
+		
+	} else {
+		if (![survey responseIsRequired]) {
+			self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
+		}
 	}
 	
 	self.title = ATLocalizedString(@"Survey", @"Survey view title");
@@ -320,6 +344,14 @@ enum {
 }
 
 - (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+	if (self.seattleDesign) {
+		// Hide bottom "Send" button
+		if (indexPath.section == [[survey questions] count]) {
+			return 0.00001f;
+		}
+	}
+	
 	UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
 	ATCellTextView *textViewCell = (ATCellTextView *)[cell viewWithTag:kTextViewTag];
 	UITextField *textFieldCell = (UITextField *)[cell viewWithTag:kTextFieldTag];
