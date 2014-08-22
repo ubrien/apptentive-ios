@@ -219,6 +219,16 @@ enum {
 		[self.navigationController.view setTintColor:[[ATConnect sharedConnection] tintColor]];
 		[self.view setTintColor:[[ATConnect sharedConnection] tintColor]];
 	}
+		
+	if (self.seattleDesign) {
+		// #DBDDDE
+		UIColor *backgroundColor = [UIColor colorWithRed:219/255.0f green:221/255.0f blue:222/255.0f alpha:1.0f];
+				
+		if ([self.navigationController.navigationBar respondsToSelector:@selector(setBarTintColor:)]) {
+			[self.navigationController.navigationBar setBarTintColor:backgroundColor];
+		}
+		[self.navigationController.navigationBar setTranslucent:NO];
+	}
 	
 	if (![survey responseIsRequired]) {
 		self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
@@ -416,7 +426,13 @@ enum {
 			cell.textLabel.numberOfLines = 0;
 			cell.textLabel.adjustsFontSizeToFitWidth = NO;
 			cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+			
 			cell.backgroundColor = [UIColor colorWithRed:223/255. green:235/255. blue:247/255. alpha:1.0];
+			if (self.seattleDesign) {
+				// #DBDDDE
+				cell.backgroundColor = [UIColor colorWithRed:219/255.0f green:221/255.0f blue:222/255.0f alpha:1.0f];
+			}
+			
 #if DEBUG_CELL_HEIGHT_PROBLEM
 			cell.textLabel.backgroundColor = [UIColor redColor];
 #endif
