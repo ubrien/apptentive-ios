@@ -435,17 +435,20 @@ enum {
 			cell.textLabel.numberOfLines = 0;
 			cell.textLabel.adjustsFontSizeToFitWidth = NO;
 			cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+			cell.textLabel.font = [UIFont boldSystemFontOfSize:20];
 			
 			cell.backgroundColor = [UIColor colorWithRed:223/255. green:235/255. blue:247/255. alpha:1.0];
 			if (self.seattleDesign) {
 				// #DBDDDE
 				cell.backgroundColor = [UIColor colorWithRed:219/255.0f green:221/255.0f blue:222/255.0f alpha:1.0f];
+				cell.textLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
+				// #323333
+				cell.textLabel.textColor = [UIColor colorWithRed:50/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
 			}
 			
 #if DEBUG_CELL_HEIGHT_PROBLEM
 			cell.textLabel.backgroundColor = [UIColor redColor];
 #endif
-			cell.textLabel.font = [UIFont boldSystemFontOfSize:20];
 		}
 		cell.textLabel.text = question.questionText;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
