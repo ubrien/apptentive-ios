@@ -236,6 +236,10 @@ enum {
 	
 	self.title = ATLocalizedString(@"Survey", @"Survey view title");
 	
+	if (self.seattleDesign) {
+		self.title = ATLocalizedString(@"Feedback", @"Seattle Design survey view title");
+	}
+	
 	tableView.delegate = self;
 	tableView.dataSource = self;
 	[tableView reloadData];
