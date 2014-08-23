@@ -607,7 +607,11 @@ enum {
 					textView.tag = kTextViewTag;
 					textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 					[cell.contentView addSubview:textView];
-					textView.returnKeyType = UIReturnKeyDefault;
+					if (self.seattleDesign) {
+						textView.returnKeyType = UIReturnKeyNext;
+					} else {
+						textView.returnKeyType = UIReturnKeyDefault;
+					}
 					[textView release], textView = nil;
 					cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				}
@@ -650,7 +654,11 @@ enum {
 					textField.tag = kTextFieldTag;
 					textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 					[cell.contentView addSubview:textField];
-					textField.returnKeyType = UIReturnKeyDone;
+					if (self.seattleDesign) {
+						textField.returnKeyType = UIReturnKeyNext;
+					} else {
+						textField.returnKeyType = UIReturnKeyDone;
+					}
 					[textField release], textField = nil;
 					cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				}
@@ -665,6 +673,11 @@ enum {
 				textField.text = question.answerText;
 			} else {
 				textField.text = @"";
+			}
+			if (self.seattleDesign) {
+				textField.returnKeyType = UIReturnKeyNext;
+			} else {
+				textField.returnKeyType = UIReturnKeyDone;
 			}
 		}
 	}
@@ -813,6 +826,16 @@ enum {
 
 #pragma mark UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+	
+	// Dismiss keyboard after pressing "Next" key.
+	if (self.seattleDesign) {
+		NSRange resultRange = [text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet] options:NSBackwardsSearch];
+		if ([text length] == 1 && resultRange.location != NSNotFound) {
+			[textView resignFirstResponder];
+			return NO;
+		}
+	}
+	
 	return YES;
 }
 
