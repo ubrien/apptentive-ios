@@ -258,13 +258,13 @@ enum {
 		UIButton *cancelButton =  [UIButton buttonWithType:UIButtonTypeCustom];
 		[cancelButton addTarget:self action:@selector(cancel:)forControlEvents:UIControlEventTouchUpInside];
 		[cancelButton setFrame:CGRectMake(0, 0, 60, 31)];
-		UILabel *cancelLabel = [[UILabel alloc]initWithFrame:CGRectMake(-17, 7, 60, 20)];
+		UILabel *cancelLabel = [[[UILabel alloc] initWithFrame:CGRectMake(-17, 7, 60, 20)] autorelease];
 		cancelLabel.text = ATLocalizedString(@"Cancel", @"Button text for canceling survey.");
 		cancelLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
 		cancelLabel.textColor = tintColor;
 		cancelLabel.textAlignment = UITextAlignmentRight;
 		[cancelButton addSubview:cancelLabel];
-		UIBarButtonItem *cancelBarButton = [[UIBarButtonItem alloc] initWithCustomView:cancelButton];
+		UIBarButtonItem *cancelBarButton = [[[UIBarButtonItem alloc] initWithCustomView:cancelButton] autorelease];
 		if (![survey responseIsRequired]) {
 			self.navigationItem.leftBarButtonItem = cancelBarButton;
 		}
@@ -273,13 +273,13 @@ enum {
 		UIButton *sendButton =  [UIButton buttonWithType:UIButtonTypeCustom];
 		[sendButton addTarget:self action:@selector(sendSurveyIfValid)forControlEvents:UIControlEventTouchUpInside];
 		[sendButton setFrame:CGRectMake(0, 0, 60, 31)];
-		UILabel *sendLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 7, 60, 20)];
+		UILabel *sendLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10, 7, 60, 20)] autorelease];
 		sendLabel.text = ATLocalizedString(@"Send", @"Button text for sending survey.");
 		sendLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:17];
 		sendLabel.textColor = tintColor;
 		sendLabel.textAlignment = UITextAlignmentRight;
 		[sendButton addSubview:sendLabel];
-		UIBarButtonItem *sendBarButton = [[UIBarButtonItem alloc] initWithCustomView:sendButton];
+		UIBarButtonItem *sendBarButton = [[[UIBarButtonItem alloc] initWithCustomView:sendButton] autorelease];
 		self.navigationItem.rightBarButtonItem = sendBarButton;
 		
 	} else {
