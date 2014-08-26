@@ -240,7 +240,10 @@
 	if ([animationID isEqualToString:@"animateIn"]) {
 		[UIView beginAnimations:@"animateOut" context:NULL];
 		[UIView setAnimationDelegate:self];
-		[UIView setAnimationDuration:2.0];
+		
+		NSTimeInterval duration = (self.fullScreen) ? 1 : 2;
+		[UIView setAnimationDuration:duration];
+		
 		self.alpha = 0.0;
 		[UIView commitAnimations];
 	} else {

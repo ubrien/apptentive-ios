@@ -205,7 +205,8 @@ enum {
 			hud.label.text = ATLocalizedString(@"Thank You!", @"Text in themed thank you display upon submitting survey.");
 		}
 		
-		hud.fadeOutDuration = 5.0;
+		CGFloat duration = (self.seattleDesign) ? 2.0 : 5.0;
+		hud.fadeOutDuration = duration;
 		[hud show];
 		[hud autorelease];
 	}
