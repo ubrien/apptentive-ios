@@ -222,6 +222,11 @@
 	[self makeKeyAndVisible];
 	self.center = parentWindow.center;
 	
+	if (self.fullScreen) {
+		// An actual change is required, otherwise the animation completes immediately.
+		self.alpha = 0.99;
+	}
+	
 	[UIView beginAnimations:@"animateIn" context:NULL];
 	[UIView setAnimationDuration:self.fadeOutDuration];
 	[UIView setAnimationDelegate:self];
