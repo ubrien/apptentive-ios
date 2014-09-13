@@ -34,6 +34,7 @@ NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCente
 
 NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFlowUserAgreedToRateAppNotification";
 
+NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
@@ -265,6 +266,8 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[integrationConfiguration setObject:configuration forKey:integration];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
@@ -279,6 +282,8 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)removeIntegration:(NSString *)integration {
 	[integrationConfiguration removeObjectForKey:integration];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:customDeviceData];
 }
 
 - (void)addUrbanAirshipIntegrationWithDeviceToken:(NSData *)deviceToken {

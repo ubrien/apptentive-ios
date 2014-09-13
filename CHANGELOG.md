@@ -1,3 +1,27 @@
+2014-09-12 pkamb v1.5.7
+--------------------------------
+
+This release adds a number of small fixes for Xcode 6 and iOS 8. We've updated the project to use Xcode 6's default settings, and fixed a number of warnings that surfaced in Xcode 6.
+
+We have also added an `ATSurveyShownNotification` notification when a survey is shown.
+
+We are now immediately updating new Push Notification integrations to the server, which will make for easier testing of new integrations. These were previously batched with device updates.
+
+This release fixes a malformed image that caused a `pngcrush` error in Xcode CI builds.
+
+Finally, we removed a debug background color that slipped into the iOS 6 Message Center's textfield.
+
+2014-08-24 pkamb v1.5.6
+--------------------------------
+
+This release adds initial iOS 8 support to the Apptentive SDK.
+
+Specifically, an issue has been fixed where Message Center messages are not displayed in iOS 8. An iPad layout issue has also been fixed.
+
+We will continue to add fixes as we test Apptentive with the latest iOS 8 beta releases. If you identify iOS 8 issues in the SDK, please contact us by opening a [GitHub issue](https://github.com/apptentive/apptentive-ios/issues)!
+
+This release also adds support for displaying Asset Catalog app icons.
+
 2014-08-19 pkamb v1.5.5
 --------------------------------
 

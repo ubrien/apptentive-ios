@@ -111,6 +111,8 @@ static NSDateFormatter *dateFormatter = nil;
 			case UIInterfaceOrientationLandscapeRight:
 				origin = CGPointMake(0, 0);
 				break;
+			default:
+				break;
 		}
 		[screenshot drawAtPoint:origin];
 		UIImage *screenshotPlusStatusBar = UIGraphicsGetImageFromCurrentImageContext();
@@ -136,6 +138,8 @@ static NSDateFormatter *dateFormatter = nil;
 			break;
 		case UIInterfaceOrientationLandscapeRight:
 			imageOrientation = UIImageOrientationLeft;
+			break;
+		default:
 			break;
 	}
 	UIImage *rotated = [[[UIImage alloc] initWithCGImage:[image CGImage] scale:1 orientation:imageOrientation] autorelease];
@@ -616,6 +620,11 @@ static NSDateFormatter *dateFormatter = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		NSArray *iconFiles = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
+		if (!iconFiles) {
+			// Asset Catalog app icons
+			iconFiles = [NSBundle mainBundle].infoDictionary[@"CFBundleIcons"][@"CFBundlePrimaryIcon"][@"CFBundleIconFiles"];
+		}
+		
 		UIImage *maxImage = nil;
 		for (NSString *path in iconFiles) {
 			UIImage *image = [UIImage imageNamed:path];
