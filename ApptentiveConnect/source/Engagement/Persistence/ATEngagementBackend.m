@@ -420,6 +420,18 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 }
 
 - (void)presentInteraction:(ATInteraction *)interaction fromViewController:(UIViewController *)viewController {
+	if (!interaction) {
+		ATLogError(@"Attempting to present an interaction that does not exist!");
+		return;
+	}
+	
+	if (![[NSThread currentThread] isMainThread]) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self presentInteraction:interaction fromViewController:viewController];
+		});
+		return;
+	}
+	
 	switch (interaction.interactionType) {
 		case ATInteractionTypeUpgradeMessage:
 			[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];
