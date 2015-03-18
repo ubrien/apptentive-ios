@@ -264,6 +264,9 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
 - (BOOL)engage:(NSString *)codePoint userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	ATLogInfo(@"Engage Apptentive event: %@", codePoint);
+	if (![[ATBackend sharedBackend] isReady]) {
+		return NO;
+	}
 	
 	[[ApptentiveMetrics sharedMetrics] addMetricWithName:codePoint info:userInfo customData:customData extendedData:extendedData];
 	
