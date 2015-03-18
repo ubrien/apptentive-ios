@@ -112,6 +112,14 @@ static NSString *ATMetricNameMessageCenterThankYouClose = @"message_center.thank
 	if (metricsEnabled == NO) {
 		return;
 	}
+	
+	if (![[NSThread currentThread] isMainThread]) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self addMetricWithName:name info:userInfo customData:customData extendedData:extendedData];
+		});
+		return;
+	}
+	
 	ATEvent *event = (ATEvent *)[ATData newEntityNamed:@"ATEvent"];
 	[event setup];
 	event.label = name;
