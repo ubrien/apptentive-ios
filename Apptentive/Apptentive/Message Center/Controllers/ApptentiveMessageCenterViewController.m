@@ -416,62 +416,62 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return height;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
-	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
-	BOOL statusLabelVisible = [self.viewModel statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
-
-	switch ([self.viewModel cellTypeAtIndexPath:indexPath]) {
-		case ATMessageCenterMessageTypeContextMessage:
-		case ATMessageCenterMessageTypeMessage:
-			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
-			minimumCellHeight = 0;
-			break;
-
-		case ATMessageCenterMessageTypeCompoundMessage:
-			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 + [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
-			if (statusLabelVisible) {
-				verticalMargin += MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 - STATUS_LABEL_MARGIN;
-			}
-			minimumCellHeight = 0;
-			break;
-
-		case ATMessageCenterMessageTypeReply:
-			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN;
-			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT;
-			break;
-
-		case ATMessageCenterMessageTypeCompoundReply:
-			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = 33.5 + [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
-			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
-			break;
-	}
-
-	if (statusLabelVisible) {
-		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
-	}
-
-	NSString *labelText = [self.viewModel textOfMessageAtIndexPath:indexPath];
-	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
-	CGRect labelRect = CGRectZero;
-	if (labelText.length) {
-		UIFont *font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
-		UIColor *color = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
-		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName: color}];
-		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-	} else {
-		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
-	}
-
-	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight) + 0.5);
-
-	// "Due to an underlying implementation detail, you should not return values greater than 2009."
-	return fmin(height, 2009.0);
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
+//	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
+//	BOOL statusLabelVisible = [self.viewModel statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
+//
+//	switch ([self.viewModel cellTypeAtIndexPath:indexPath]) {
+//		case ATMessageCenterMessageTypeContextMessage:
+//		case ATMessageCenterMessageTypeMessage:
+//			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
+//			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
+//			minimumCellHeight = 0;
+//			break;
+//
+//		case ATMessageCenterMessageTypeCompoundMessage:
+//			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
+//			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 + [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+//			if (statusLabelVisible) {
+//				verticalMargin += MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 - STATUS_LABEL_MARGIN;
+//			}
+//			minimumCellHeight = 0;
+//			break;
+//
+//		case ATMessageCenterMessageTypeReply:
+//			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
+//			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN;
+//			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT;
+//			break;
+//
+//		case ATMessageCenterMessageTypeCompoundReply:
+//			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
+//			verticalMargin = 33.5 + [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+//			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
+//			break;
+//	}
+//
+//	if (statusLabelVisible) {
+//		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
+//	}
+//
+//	NSString *labelText = [self.viewModel textOfMessageAtIndexPath:indexPath];
+//	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
+//	CGRect labelRect = CGRectZero;
+//	if (labelText.length) {
+//		UIFont *font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
+//		UIColor *color = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
+//		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName: color}];
+//		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+//	} else {
+//		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
+//	}
+//
+//	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight) + 0.5);
+//
+//	// "Due to an underlying implementation detail, you should not return values greater than 2009."
+//	return fmin(height, 2009.0);
+//}
 
 #pragma mark Table view delegate
 
