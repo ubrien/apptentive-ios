@@ -121,7 +121,7 @@
                             </connections>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="6et-WJ-u3H">
-                            <rect key="frame" x="0.0" y="913.5" width="375" height="300"/>
+                            <rect key="frame" x="0.0" y="897.5" width="375" height="300"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aj5-aD-yTM" customClass="ApptentiveMessageCenterInputView">
@@ -433,15 +433,15 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ContextMessage" rowHeight="64" id="5ec-cK-c7K" userLabel="Context Message" customClass="ApptentiveMessageCenterContextMessageCell">
-                                <rect key="frame" x="0.0" y="313.5" width="375" height="64"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ContextMessage" rowHeight="48" id="5ec-cK-c7K" userLabel="Context Message" customClass="ApptentiveMessageCenterContextMessageCell">
+                                <rect key="frame" x="0.0" y="313.5" width="375" height="48"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5ec-cK-c7K" id="jRh-G0-si1">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="47.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="This is a context message." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="51V-f8-IsS">
-                                            <rect key="frame" x="15" y="14" width="345" height="35.5"/>
+                                            <rect key="frame" x="15" y="14" width="345" height="19.5"/>
                                             <color key="textColor" red="0.066666666666666666" green="0.066666666666666666" blue="0.090196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -461,7 +461,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Reply" rowHeight="87" id="JK9-ui-0US" customClass="ApptentiveMessageCenterReplyCell">
-                                <rect key="frame" x="0.0" y="377.5" width="375" height="87"/>
+                                <rect key="frame" x="0.0" y="361.5" width="375" height="87"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JK9-ui-0US" id="mF7-ws-xVD">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="86.5"/>
@@ -509,7 +509,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Message" rowHeight="93" id="hi8-Bq-GR3" customClass="ApptentiveMessageCenterMessageCell">
-                                <rect key="frame" x="0.0" y="464.5" width="375" height="93"/>
+                                <rect key="frame" x="0.0" y="448.5" width="375" height="93"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi8-Bq-GR3" id="H0J-6d-bTN">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="92.5"/>
@@ -522,7 +522,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Yeah, I like the app overall, but it just closed without saving. Can you help?" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="l1M-wM-7fc">
-                                            <rect key="frame" x="15" y="14" width="345" height="64.5"/>
+                                            <rect key="frame" x="15" y="14" width="345" height="34"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits"/>
                                             <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
@@ -534,8 +534,9 @@
                                         <constraint firstAttribute="trailing" secondItem="l1M-wM-7fc" secondAttribute="trailing" constant="15" id="Kub-8Q-9yD"/>
                                         <constraint firstItem="l1M-wM-7fc" firstAttribute="leading" secondItem="H0J-6d-bTN" secondAttribute="leading" constant="15" id="Utz-12-Xk4"/>
                                         <constraint firstItem="qyc-gl-oxc" firstAttribute="leading" secondItem="H0J-6d-bTN" secondAttribute="leading" constant="15" id="h3Z-FQ-SxP"/>
-                                        <constraint firstAttribute="bottom" secondItem="l1M-wM-7fc" secondAttribute="bottom" constant="14" id="iwl-Oh-jSP"/>
+                                        <constraint firstItem="qyc-gl-oxc" firstAttribute="top" secondItem="l1M-wM-7fc" secondAttribute="bottom" constant="15" id="iAg-qx-yGI"/>
                                         <constraint firstAttribute="trailing" secondItem="qyc-gl-oxc" secondAttribute="trailing" constant="15" id="oxx-cV-R3q"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="l1M-wM-7fc" secondAttribute="bottom" constant="14" id="s4R-ns-kYQ"/>
                                         <constraint firstAttribute="bottom" secondItem="qyc-gl-oxc" secondAttribute="bottom" constant="15" id="z8c-5f-ggb"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -545,7 +546,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundMessage" rowHeight="181" id="evQ-54-Bpq" userLabel="CompoundMessage" customClass="ApptentiveCompoundMessageCell">
-                                <rect key="frame" x="0.0" y="557.5" width="375" height="181"/>
+                                <rect key="frame" x="0.0" y="541.5" width="375" height="181"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="evQ-54-Bpq" id="cxM-mJ-g02">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="180.5"/>
@@ -639,6 +640,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="collectionView" destination="k3E-kW-rhx" id="7wF-xi-EHz"/>
+                                    <outlet property="collectionViewHeightConstraint" destination="Vxk-Sb-Ffc" id="Roa-E6-ZJX"/>
                                     <outlet property="messageLabel" destination="PvY-mz-4Y9" id="psy-16-umt"/>
                                     <outlet property="messageLabelCollectionViewSpacing" destination="WDZ-hc-yzf" id="UG4-hT-xBu"/>
                                     <outlet property="messageStatusSpacingConstraint" destination="6tO-Fw-2Vd" id="ZQV-7s-gOx"/>
@@ -646,7 +648,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundReply" rowHeight="169" id="nj1-yL-vAx" customClass="ApptentiveCompoundReplyCell">
-                                <rect key="frame" x="0.0" y="738.5" width="375" height="169"/>
+                                <rect key="frame" x="0.0" y="722.5" width="375" height="169"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nj1-yL-vAx" id="n4I-KM-rdG">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="168.5"/>
@@ -750,6 +752,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="collectionView" destination="8yd-Pf-GMV" id="Ovs-6I-POk"/>
+                                    <outlet property="collectionViewHeightConstraint" destination="Zg6-bh-qrn" id="7O3-Io-NTz"/>
                                     <outlet property="messageLabel" destination="OL7-yh-Ixu" id="FDe-bv-UKX"/>
                                     <outlet property="senderLabel" destination="gmM-NC-xG3" id="H8U-h3-JsX"/>
                                     <outlet property="supportUserImageView" destination="Jsr-98-e62" id="kjT-hK-ySn"/>

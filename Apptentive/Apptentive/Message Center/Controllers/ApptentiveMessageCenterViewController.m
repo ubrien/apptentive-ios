@@ -32,18 +32,18 @@
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
 #define TEXT_VIEW_VERTICAL_INSET 10.0
 #define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
+#define MINIMUM_INPUT_VIEW_HEIGHT 108.0
 
 #define FOOTER_ANIMATION_DURATION 0.10
 
 // The following need to match the storyboard for sizing cells on iOS 7
-#define MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN 30.0
-#define REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN 74.0
-#define MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN 29.0
-#define REPLY_LABEL_TOTAL_VERTICAL_MARGIN 46.0
-#define REPLY_CELL_MINIMUM_HEIGHT 66.0
-#define STATUS_LABEL_HEIGHT 14.0
-#define STATUS_LABEL_MARGIN 6.0
-#define MINIMUM_INPUT_VIEW_HEIGHT 108.0
+//#define MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN 30.0
+//#define REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN 74.0
+//#define MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN 29.0
+//#define REPLY_LABEL_TOTAL_VERTICAL_MARGIN 46.0
+//#define REPLY_CELL_MINIMUM_HEIGHT 66.0
+//#define STATUS_LABEL_HEIGHT 14.0
+//#define STATUS_LABEL_MARGIN 6.0
 
 NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
 NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
@@ -395,10 +395,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[compoundCell.collectionView reloadData];
 		compoundCell.collectionView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
 
+
 		UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
 		layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);
 		layout.minimumInteritemSpacing = ATTACHMENT_MARGIN.width;
 		layout.itemSize = [ApptentiveAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
+
+		compoundCell.collectionViewHeightConstraint.constant = ATTACHMENT_MARGIN.height * 2 + layout.itemSize.height;
 
 		compoundCell.messageLabelHidden = compoundCell.messageLabel.text.length == 0;
 	}
