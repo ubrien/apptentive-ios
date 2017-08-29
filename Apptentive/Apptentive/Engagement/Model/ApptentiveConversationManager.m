@@ -120,6 +120,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading logged-in conversation...");
 		ApptentiveConversation *loggedInConversation = [self loadConversationFromMetadataItem:item];
 
+		[self loadEngagementManfiest];
 		[self createMessageManagerForConversation:loggedInConversation];
 
 		return loggedInConversation;
@@ -134,6 +135,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous conversation...");
 		ApptentiveConversation *anonymousConversation = [self loadConversationFromMetadataItem:item];
 
+		[self loadEngagementManfiest];
 		[self createMessageManagerForConversation:anonymousConversation];
 
 		return anonymousConversation;
@@ -144,8 +146,20 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return item.state == ApptentiveConversationStateAnonymousPending;
 	}];
 	if (item != nil) {
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous pending conversation...");
 		ApptentiveConversation *conversation = [self loadConversationFromMetadataItem:item];
 		[self fetchConversationToken:conversation];
+		return conversation;
+	}
+	
+	// check if we have a 'pending' legacy conversation
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.state == ApptentiveConversationStateLegacyPending;
+	}];
+	if (item != nil) {
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading legacy pending conversation...");
+		ApptentiveConversation *conversation = [self loadConversationFromMetadataItem:item];
+		[self fetchLegacyConversation:conversation];
 		return conversation;
 	}
 
@@ -351,12 +365,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)updateMetadataItems:(ApptentiveConversation *)conversation {
-	if (conversation.state == ApptentiveConversationStateAnonymousPending ||
-		conversation.state == ApptentiveConversationStateLegacyPending) {
-		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Skipping updating metadata since conversation is %@", NSStringFromApptentiveConversationState(conversation.state));
-		return;
-	}
-
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Updating metadata: state=%@ localId=%@ conversationId=%@ token=%@", NSStringFromApptentiveConversationState(conversation.state), conversation.localIdentifier, conversation.identifier, conversation.token);
+	
 	// if the conversation is 'logged-in' we should not have any other 'logged-in' items in metadata
 	if (conversation.state == ApptentiveConversationStateLoggedIn) {
 		for (ApptentiveConversationMetadataItem *item in self.conversationMetadata.items) {
@@ -366,24 +376,32 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		}
 	}
 
-	// delete all existing encryption keys
+	// delete sensitive information
 	for (ApptentiveConversationMetadataItem *item in self.conversationMetadata.items) {
 		item.encryptionKey = nil;
+		item.JWT = nil;
 	}
 
 	// update the state of the corresponding item
 	ApptentiveConversationMetadataItem *item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		if (item.conversationLocalIdentifier.length > 0) {
+			return [item.conversationLocalIdentifier isEqualToString:conversation.localIdentifier];
+		}
+		// lookup item for SDK prior to v4.0.4 (legacy)
 		return [item.conversationIdentifier isEqualToString:conversation.identifier];
 	}];
 	if (item == nil) {
-		item = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier directoryName:conversation.directoryName];
+		item = [[ApptentiveConversationMetadataItem alloc] initWithConversationLocalIdentifier:conversation.localIdentifier conversationIdentifier:conversation.identifier directoryName:conversation.directoryName];
 		[self.conversationMetadata addItem:item];
+	} else {
+		ApptentiveAssertTrue(conversation.identifier != nil || conversation.state == ApptentiveConversationStateAnonymousPending || conversation.state == ApptentiveConversationStateLegacyPending, @"Missing conversation id for state: %@", NSStringFromApptentiveConversationState(conversation.state));
+		item.conversationIdentifier = conversation.identifier;
+		item.conversationLocalIdentifier = conversation.localIdentifier;
 	}
 
 	item.state = conversation.state;
-	if (item.state == ApptentiveConversationStateLoggedOut) {
-		item.JWT = nil;
-	} else {
+	if ([conversation hasActiveState]) {
+		ApptentiveAssertNotNil(conversation.token, @"Conversation token is nil");
 		item.JWT = conversation.token;
 	}
 
@@ -639,9 +657,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	[self saveManifest];
 
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
-	});
+	[self notifyEngagementManifestUpdate];
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation processLoginResponse:(NSDictionary *)loginResponse userId:(NSString *)userId token:(NSString *)token {
@@ -851,9 +867,41 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return succeed;
 }
 
+#pragma mark - Engagement manifest
+
+- (void)loadEngagementManfiest {
+	if ([[NSFileManager defaultManager] fileExistsAtPath:self.manifestPath]) {
+		ApptentiveLogDebug(@"Loading cached engagment manifest from %@", self.manifestPath);
+		@try {
+			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:self.manifestPath];
+
+			[self notifyEngagementManifestUpdate];
+		} @catch (NSException *exc) {
+			ApptentiveAssertFail(@"Exception when loading engagement manifest: %@", exc);
+		}
+	} else {
+		ApptentiveLogDebug(@"No cached engagement manifest available at %@", self.manifestPath);
+	}
+}
+
+- (void)migrateEngagementManifest {
+	_manifest = [[ApptentiveEngagementManifest alloc] initWithCachePath:self.storagePath userDefaults:[NSUserDefaults standardUserDefaults]];
+
+	if (self.manifest) {
+		[ApptentiveEngagementManifest deleteMigratedDataFromCachePath:self.storagePath];
+		[self notifyEngagementManifestUpdate];
+	}
+}
+
+- (void)notifyEngagementManifestUpdate {
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
+	});
+}
+
 - (BOOL)saveManifest {
 	@synchronized(self.manifest) {
-		return [NSKeyedArchiver archiveRootObject:_manifest toFile:[self manifestPath]];
+		return [NSKeyedArchiver archiveRootObject:_manifest toFile:self.manifestPath];
 	}
 }
 
@@ -880,14 +928,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	[self.client.networkQueue addOperation:self.manifestOperation];
-}
-
-- (void)migrateEngagementManifest {
-	_manifest = [[ApptentiveEngagementManifest alloc] initWithCachePath:self.storagePath userDefaults:[NSUserDefaults standardUserDefaults]];
-
-	if (self.manifest) {
-		[ApptentiveEngagementManifest deleteMigratedDataFromCachePath:self.storagePath];
-	}
 }
 
 - (void)scheduleSaveConversation:(ApptentiveConversation *)conversation {
@@ -961,7 +1001,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		_localEngagementManifestURL = localEngagementManifestURL;
 
 		if (localEngagementManifestURL == nil) {
-			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:[self manifestPath]];
+			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:self.manifestPath];
 
 			if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
 				[self fetchEngagementManifest];
