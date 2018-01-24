@@ -59,9 +59,13 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
     }
     
     NSString *scheme = [NSString  stringWithFormat:@"%@://",ApptentiveCustomNotificationCenterScheme];
-    NSString *notificationPayload=[[url absoluteString]stringByReplacingOccurrencesOfString:scheme withString:@""];
+    NSString *notification=[[url absoluteString]stringByReplacingOccurrencesOfString:scheme withString:@""];
+    NSDictionary *payload=@{
+                            @"notification":notification,
+                            @"url":url
+                            };
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomNotificationCenterPayload object:notificationPayload];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomNotificationCenterPayload object:payload];
     return YES;
 
 }
