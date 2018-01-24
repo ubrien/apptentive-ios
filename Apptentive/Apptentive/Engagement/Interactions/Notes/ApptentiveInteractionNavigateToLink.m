@@ -70,6 +70,7 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 -(BOOL)intentToProcessURLLink:(NSURL*)url{
     
     BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
+    BOOL openedURL=NO;
     
     // In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
     if (!attemptToOpenURL) {
