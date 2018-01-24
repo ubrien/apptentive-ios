@@ -50,6 +50,8 @@ NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDevi
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
 NSString *const ApptentiveManifestRawDataKey = @"ApptentiveManifestRawDataKey";
 
+NSString *const ApptentiveNotificationCenterDispatch = @"com.apptentive.notificationCenterDispatch";
+
 NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
 static Apptentive *_sharedInstance;
