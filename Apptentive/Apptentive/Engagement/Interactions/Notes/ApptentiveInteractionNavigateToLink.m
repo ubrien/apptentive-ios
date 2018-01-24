@@ -28,31 +28,19 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 	BOOL openedURL = NO;
 	NSString *urlString = self.interaction.configuration[@"url"];
 	NSURL *url = [NSURL URLWithString:urlString];
-	if (url) {
-        
-        if([self intentToProcessNotificationCenterDispatch:url]){
-            return;
-        }
-        
-		BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
-
-		// In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
-		if (!attemptToOpenURL) {
-			attemptToOpenURL = YES;
-		}
-
-		if (attemptToOpenURL) {
-			openedURL = [[UIApplication sharedApplication] openURL:url];
-			if (!openedURL) {
-				ApptentiveLogError(@"Could not open URL: %@", url);
-			}
-		} else {
-			ApptentiveLogError(@"No application can open the Interaction's URL: %@", url);
-		}
-	} else {
-		ApptentiveLogError(@"No URL was included in the NavigateToLink Interaction's configuration.");
-	}
-
+    
+    if(!url) {
+        ApptentiveLogError(@"No URL was included in the NavigateToLink Interaction's configuration.");
+    }
+    
+    if (url && [self intentToProcessNotificationCenterDispatch:url]){
+        openedURL=YES;
+    }
+    
+    if (url && [self intentToProcessURLLink:url]){
+        openedURL=YES;
+    }
+		
 	NSDictionary *userInfo = @{ @"url": (urlString ?: [NSNull null]),
 		@"success": @(openedURL),
 	};
@@ -78,6 +66,28 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 
 }
 
+
+-(BOOL)intentToProcessURLLink:(NSURL*)url{
+    
+    BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
+    
+    // In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
+    if (!attemptToOpenURL) {
+        // is this really intentional it seems like we can just skip this logic?
+        attemptToOpenURL = YES;
+    }
+    
+    if (attemptToOpenURL) {
+        openedURL = [[UIApplication sharedApplication] openURL:url];
+        if (!openedURL) {
+            ApptentiveLogError(@"Could not open URL: %@", url);
+        }
+    } else {
+        ApptentiveLogError(@"No application can open the Interaction's URL: %@", url);
+    }
+    
+    return openedURL;
+}
 
 @end
 
