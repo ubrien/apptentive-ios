@@ -76,6 +76,9 @@ extern NSNotificationName const ApptentiveSurveyShownNotification;
 /** Notification sent when a survey is submitted by the user. */
 extern NSNotificationName const ApptentiveSurveySentNotification;
 
+/** Notification sent when a link contains the apptentive notification-dispatch schema. Payload will contain the link info **/
+extern NSNotificationName const ApptentiveCustomNotificationCenterPayload;
+
 /** Error domain for the Apptentive SDK */
 extern NSString *const ApptentiveErrorDomain;
 

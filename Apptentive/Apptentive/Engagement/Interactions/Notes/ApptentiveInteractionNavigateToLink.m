@@ -29,6 +29,11 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 	NSString *urlString = self.interaction.configuration[@"url"];
 	NSURL *url = [NSURL URLWithString:urlString];
 	if (url) {
+        
+        if([self intentToProcessNotificationCenterDispatch:url]){
+            return;
+        }
+        
 		BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
 
 		// In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
@@ -54,6 +59,25 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 
 	[Apptentive.shared.backend engage:ATInteractionNavigateToLinkEventLabelNavigate fromInteraction:self.interaction fromViewController:nil userInfo:userInfo];
 }
+
+-(BOOL)intentToProcessNotificationCenterDispatch:(NSURL*)url{
+    
+    
+    NSParameterAssert(url);
+    
+    if(![url.scheme isEqualToString:ApptentiveCustomNotificationCenterScheme]){
+        //early abort intent
+        return NO;
+    }
+    
+    NSString *scheme = [NSString  stringWithFormat:@"%@://",ApptentiveCustomNotificationCenterScheme];
+    NSString *notificationPayload=[[url absoluteString]stringByReplacingOccurrencesOfString:scheme withString:@""];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomNotificationCenterPayload object:notificationPayload];
+    return YES;
+
+}
+
 
 @end
 
