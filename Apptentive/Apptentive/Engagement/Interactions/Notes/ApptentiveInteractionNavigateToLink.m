@@ -33,11 +33,11 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
         ApptentiveLogError(@"No URL was included in the NavigateToLink Interaction's configuration.");
     }
     
-    if (url && [self intentToProcessNotificationCenterDispatch:url]){
+    if (!openedURL && url && [self intentToProcessNotificationCenterDispatch:url]){
         openedURL=YES;
     }
     
-    if (url && [self intentToProcessURLLink:url]){
+    if (!openedURL &&  url && [self intentToProcessURLLink:url]){
         openedURL=YES;
     }
 		
